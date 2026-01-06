@@ -20,6 +20,70 @@ def show_menu():    # 'def' used to define a function in our case to show menu
     print("7. Exit")
     print("="*40)
 
+
+def add_expense():
+    """Add new expense to the tracker"""
+    print("\n" + "="*40)
+    print("     ADD NEW EXPENSE")
+    print("="*40)
+
+    # Get expense details from user
+
+    try:        # Try to do this code
+        # Get amount and convert to float
+        amount = float(input("Enter amount (e.g., 42.50): "))
+
+        # Get category
+        category = input("Enter category (e.g., food, transport, entertainment): ").lower()     # Helps with consistency by keeping everything in lower case
+
+        # Get description
+        description = input("Enter description: ")
+
+        # Get date
+        from datetime import date
+        today = date.today().strftime("%Y-%m-%d")   # Gets today's date
+
+        # Create expense dictionary
+        expense = {
+            'amount': amount,   # Key: value
+            'category': category,
+            'description': description,
+            'date': today
+        }
+
+        # Add to expense list
+        expenses.append(expense)    # .append() adds item to the end a list
+
+        print(f"\n✅ Expense added successfully!")
+        print(f"    Amount: ${amount:.2f}")     # {amount:.2f} formats the number to 2 decimal places
+        print(f"    Category: {category}")
+        print(f"    Description: {description}")
+        print(f"    Date: {today}")
+
+    except ValueError:      # If there's a ValueError (user types "abc" instead of a number)     # Do this instead
+        print("\n❌ Error: Please enter a valid number for amount!")
+
+
+def view_expenses():
+    """Display all expenses"""
+    if not expenses:    # if list is empty
+        print("\n📭 No expenses recorded yet!")
+        return  # Exits the function early
+    
+    print("\n" + "="*60)
+    print("                     ALL EXPENSES")
+    print("="*60)
+
+    # Loop through each expense in the list
+    for i, expense in enumerate(expenses, 1):    # enumerate gives us: i = the index/position (starting at 1) and expense = the actuall expense dictionary
+        print(f"\n#{i}")
+        print(f"    Date:           {expense['date']}")
+        print(f"    Category:       {expense['category']}")
+        print(f"    Description:    {expense['description']}")
+        print(f"    Amount:         {expense['amount']}")
+        print("-"*60)
+
+
 def main():
     """Main Program loop"""
     print("Welcome to your personal Expense Tracker!")
@@ -29,11 +93,11 @@ def main():
         choice = input("\nEnter your choice (1-7): ")
 
         if choice == '1':
-            print("Add expense - Coming soon!")
+            add_expense()
         elif choice == '2':
-            print("View expense - Coming soon!")
+            view_expenses()
         elif choice == '3':
-            print("VTotal Spending - Coming soon!")
+            print("Total Spending - Coming soon!")
         elif choice == '4':
             print("Filter by Category - Coming soon!")
         elif choice == '5':

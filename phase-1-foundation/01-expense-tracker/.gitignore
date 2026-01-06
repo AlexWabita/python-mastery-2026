@@ -1,0 +1,7 @@
+# Ignore expense data files (they might contain personal info)
+data/*.txt
+data/*.json
+!data/.gitkeep
+
+# Testing files
+test_expenses.txt

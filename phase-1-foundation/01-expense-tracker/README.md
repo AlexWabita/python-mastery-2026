@@ -4,12 +4,12 @@
 A command-line application to track daily expenses, categorize spending, and generate reports.
 
 ## Features
-- [] Add expenses with ammount, category, and description
-- [] View all expenses
-- [] Calculate total spending
-- [] Filter expenses by category
-- [] Save expenses to file
-- [] Load expenses from file
+- [ ] Add expenses with ammount, category, and description
+- [ ] View all expenses
+- [ ] Calculate total spending
+- [ ] Filter expenses by category
+- [ ] Save expenses to file
+- [ ] Load expenses from file
 
 ## What I'm Learning
 - Python basics: variables, data types

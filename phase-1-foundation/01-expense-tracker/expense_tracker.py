@@ -104,6 +104,53 @@ def calculate_total():
     print("="*40)
 
 
+def view_by_category():
+    """View expenses filtered by category"""
+    if not expenses:
+        print("\n📭 No expenses recorded yet!")
+        return
+    # Get all unique categories
+    categories = set()  # 'set' stalls uique values only
+    for expense in expenses:
+        categories.add(expense['category'])
+
+    # Show available categories
+    print("\n" + "="*40)
+    print("Available categories:")
+    for cat in sorted(categories):
+        print(f"  -  {cat}")
+    print("="*40)
+
+    # Ask user which category to filter
+    filter_cat = input("\nEnter the category to view: ").lower()
+
+    # filter expenses by caetegory
+    filtered = []
+    for expense in expenses:
+        if expense['category'] == filter_cat:
+            filtered.append(expense)
+    
+    # Display thr filtered results
+    if not filtered:
+        print(f"\n❌ No expenses found in category '{filter_cat}'")
+        return
+    
+    print(f"\n{'='*60}")
+    print(f"    EXPENSES IN CATEGORY: {filter_cat}")
+    print("="*60)
+
+    category_total = 0
+    for i, expense in enumerate(filtered, 1):
+        print(f"\n#{i}")
+        print(f"  Date:        {expense['date']}")
+        print(f"  Description: {expense['description']}")
+        print(f"  Amount:      ${expense['amount']:.2f}")
+        category_total += expense['amount']
+        print("-" * 60)
+
+    print(f"\nTotal for {filter_cat}: ${category_total:.2f}")
+
+
 def main():
     """Main Program loop"""
     print("Welcome to your personal Expense Tracker!")
@@ -119,7 +166,7 @@ def main():
         elif choice == '3':
             calculate_total()
         elif choice == '4':
-            print("Filter by Category - Coming soon!")
+            view_by_category()
         elif choice == '5':
             print("save - Coming soon!")
         elif choice == '6':

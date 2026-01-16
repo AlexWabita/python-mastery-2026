@@ -1,7 +1,26 @@
+import json     # We'll use JSON format (JavaScript Object Notation) - a standard way to store data.
+from datetime import date
+import os
+
 """
 Personal Expense Tracker
 A simple CLI tool to manage daily expensis
 """
+
+# ===========================================
+# Function to clear screen in the terminal
+# ===========================================
+def clear_screen():
+    """Clear the terminal Screen"""
+    # Check the OS of the system
+    if os.name == 'nt':
+        os.system('cls')
+    else:       # Mac/Linux
+        os.system('clear')
+    
+    print("✨ Screen cleared!\n")
+
+
 
 # This list will store all of our expenses
 expenses = []   # This will be used to hold all our expense dictionaries
@@ -15,9 +34,11 @@ def show_menu():    # 'def' used to define a function in our case to show menu
     print("2. View All Expense")
     print("3. View Total Spending")
     print("4. View Expenses by Category")
-    print("5. Save Expense")
-    print("6. Load Expense")
-    print("7. Exit")
+    print("5. Delete Expense")
+    print("6. Save Expense")
+    print("7. Load Expense")
+    print("8. clear Screen")
+    print("9. Exit")
     print("="*40)
 
 
@@ -40,7 +61,6 @@ def add_expense():
         description = input("Enter description: ")
 
         # Get date
-        from datetime import date
         today = date.today().strftime("%Y-%m-%d")   # Gets today's date
 
         # Create expense dictionary
@@ -109,6 +129,7 @@ def view_by_category():
     if not expenses:
         print("\n📭 No expenses recorded yet!")
         return
+
     # Get all unique categories
     categories = set()  # 'set' stalls uique values only
     for expense in expenses:
@@ -117,7 +138,7 @@ def view_by_category():
     # Show available categories
     print("\n" + "="*40)
     print("Available categories:")
-    for cat in sorted(categories):
+    for cat in sorted(categories):  # Sorts the available categories
         print(f"  -  {cat}")
     print("="*40)
 
@@ -125,10 +146,10 @@ def view_by_category():
     filter_cat = input("\nEnter the category to view: ").lower()
 
     # filter expenses by caetegory
-    filtered = []
+    filtered = []   # Empty list
     for expense in expenses:
-        if expense['category'] == filter_cat:
-            filtered.append(expense)
+        if expense['category'] == filter_cat:   # Check condition
+            filtered.append(expense)            # Add if the condition matches
     
     # Display thr filtered results
     if not filtered:
@@ -151,13 +172,94 @@ def view_by_category():
     print(f"\nTotal for {filter_cat}: ${category_total:.2f}")
 
 
+def delete_expense():
+    """Delete an expense from the tracker"""
+    if not expenses:
+        print("\n📭 No expenses to delete")
+        return
+    
+    # Show all expenses with numbers
+    print("\n" + "="*60)
+    print("                 DELETE EXPENSES")
+    print("="*60)
+
+    for i, expense in enumerate(expenses, 1):
+        print(f"\n#{i}")
+        print(f"  Date:        {expense['date']}")
+        print(f"  Category:    {expense['category']}")
+        print(f"  Description: {expense['description']}")
+        print(f"  Amount:      ${expense['amount']:.2f}")
+        print("-" * 60)
+
+    # Ask which one to delete
+    try:
+        choice = input("\nEnter expense number to delete (or 0 to cancel): ")
+        choice = int(choice)
+
+        if choice == 0:
+            print("\n❌ Delete Cancelled.")
+            return
+        
+        if 1 <= choice <= len(expenses):
+            # Get the expense before deleting (to show confirmation)
+            deleted = expenses[choice - 1] # we've used -1 because list starts at 0
+
+            # Delete it from the list
+            expenses.pop(choice - 1)
+
+            print(f"\n✅ Deleted expense:")
+            print(f"    Category: {deleted['category']}")
+            print(f"    Description: {deleted['description']}")
+            print(f"    Amount: {deleted['amount']:.2f}")
+        else:
+            print(f"\n❌ Invalid number! Please enter 1-{len(expenses)}")
+    
+    except ValueError:
+        print("\n❌ Please enter a valid number!")
+
+
+def save_expenses():
+    """Save expenses to a JSON file"""
+    if not expenses:
+        print("\n📭 No expenses to save!")
+        return
+    
+    try:
+        # Open file in write mode
+        with open('data/expenses.json', 'w') as file:
+            json.dump(expenses, file, indent=4)      # saves with nice formating
+            # file automaticaly closes when done
+        print(f"\n✅ Successfully saved {len(expenses)} expenses to file!")
+    
+    except Exception as e:
+        print(f"\n❌ Error saving file: {e}")
+
+
+def load_expenses():
+    """Load expenses from JSON file"""
+    global expenses     # we need to modify the gloabal expenses list which is 'global'
+
+    try:
+        # Open file in read mode
+        with open('data/expenses.json', 'r') as file:
+            expenses = json.load(file)      # loads data from file
+        
+        print(f"\n✅ Successfully loaded {len('expenses')} expenses from file!")
+    
+    except FileNotFoundError:       # Handles this specific error
+        print("\n📭 No saved expenses found. Starting fresh!")
+    
+    except Exception as e:      # Catches any other error
+        print(f"\n❌ Error loading file: {e}")
+
+
 def main():
     """Main Program loop"""
     print("Welcome to your personal Expense Tracker!")
 
     while True:     # Keeps the code running forever until a break is initiated
         show_menu()
-        choice = input("\nEnter your choice (1-7): ")
+        choice = input("\nEnter your choice (1-9): ")
 
         if choice == '1':
             add_expense()
@@ -168,10 +270,14 @@ def main():
         elif choice == '4':
             view_by_category()
         elif choice == '5':
-            print("save - Coming soon!")
+            delete_expense()
         elif choice == '6':
-            print("Load - Coming soon!")
+            save_expenses()
         elif choice == '7':
+            load_expenses()
+        elif choice == '8':
+            clear_screen()
+        elif choice == '9':
             print("\nThank you for using Expense Tracker. Goodbye!")
             break   # exits the loop
         else:

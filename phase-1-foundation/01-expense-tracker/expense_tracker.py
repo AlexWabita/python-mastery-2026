@@ -7,9 +7,12 @@ Personal Expense Tracker
 A simple CLI tool to manage daily expensis
 """
 
-# ===========================================
+
+# This list will store all of our expenses
+expenses = []   # This will be used to hold all our expense dictionaries
+
+
 # Function to clear screen in the terminal
-# ===========================================
 def clear_screen():
     """Clear the terminal Screen"""
     # Check the OS of the system
@@ -21,24 +24,21 @@ def clear_screen():
     print("✨ Screen cleared!\n")
 
 
-
-# This list will store all of our expenses
-expenses = []   # This will be used to hold all our expense dictionaries
-
 def show_menu():    # 'def' used to define a function in our case to show menu
     """Display the main menu options"""
     print("\n" + "="*40)
     print("     PERSONAL EXPENSE TRACKER")
     print("="*40)
-    print("1. Add Expense")
-    print("2. View All Expense")
-    print("3. View Total Spending")
-    print("4. View Expenses by Category")
-    print("5. Delete Expense")
-    print("6. Save Expense")
-    print("7. Load Expense")
-    print("8. clear Screen")
-    print("9. Exit")
+    print("1.   Add Expense")
+    print("2.   View All Expense")
+    print("3.   View Total Spending")
+    print("4.   View Expenses by Category")
+    print("5.   Delete Expense")
+    print("6.   Delete Expenses by Category")
+    print("7.   Save Expense")
+    print("8.   Load Expense")
+    print("9.   clear Screen")
+    print("10.  Exit")
     print("="*40)
 
 
@@ -218,6 +218,55 @@ def delete_expense():
         print("\n❌ Please enter a valid number!")
 
 
+def delete_by_category():
+    """Delete all expenses in a specific category"""
+    if not expenses:
+        print("\n📭 No expenses to delete!")
+        return
+    
+    # Get all unique categories
+    categories = set()
+    for expense in expenses:
+        categories.add(expense['category'])
+    
+    # Show available categories
+    print("\n" + "="*40)
+    print("DELETE BY CATEGORY")
+    print("="*40)
+    print("Available categories:")
+    for category in sorted(categories):
+        count = sum(1 for exp in expenses if exp['category'] == category)
+        print(f"  - {category} ({count} expenses)")
+    print("="*40)
+    
+    # Ask which category
+    category = input("\nEnter category to delete (or press Enter to cancel): ").lower()
+    
+    if not category:
+        print("\n❌ Delete cancelled.")
+        return
+    
+    # Find all expenses in this category
+    to_delete = [exp for exp in expenses if exp['category'] == category]
+    
+    if not to_delete:
+        print(f"\n❌ No expenses found in category '{category}'")
+        return
+    
+    # Ask for confirmation
+    print(f"\n⚠️  WARNING: This will delete {len(to_delete)} expense(s)!")
+    confirm = input("Type 'yes' to confirm: ").lower()
+    
+    if confirm == 'yes':
+        # Delete using a loop instead of reassignment
+        # This modifies the list in place, no global needed!
+        for exp in to_delete:
+            expenses.remove(exp)
+        print(f"\n✅ Deleted {len(to_delete)} expense(s) from '{category}'")
+    else:
+        print("\n❌ Delete cancelled.")
+
+
 def save_expenses():
     """Save expenses to a JSON file"""
     if not expenses:
@@ -233,6 +282,7 @@ def save_expenses():
     
     except Exception as e:
         print(f"\n❌ Error saving file: {e}")
+
 
 
 def load_expenses():
@@ -259,7 +309,7 @@ def main():
 
     while True:     # Keeps the code running forever until a break is initiated
         show_menu()
-        choice = input("\nEnter your choice (1-9): ")
+        choice = input("\nEnter your choice (1-10): ")
 
         if choice == '1':
             add_expense()
@@ -272,16 +322,18 @@ def main():
         elif choice == '5':
             delete_expense()
         elif choice == '6':
-            save_expenses()
+            delete_by_category()
         elif choice == '7':
-            load_expenses()
+            save_expenses()
         elif choice == '8':
-            clear_screen()
+            load_expenses()
         elif choice == '9':
+            clear_screen()
+        elif choice == '10':
             print("\nThank you for using Expense Tracker. Goodbye!")
             break   # exits the loop
         else:
-            print("\n❌ Invalid choioce! Please enter a number between 1-7.")
+            print("\n❌ Invalid choioce! Please enter a number between 1-10.")
 
 
 # This runs the program

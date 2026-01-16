@@ -84,6 +84,26 @@ def view_expenses():
         print("-"*60)
 
 
+def calculate_total():
+    """Calculate and show total spendind"""
+    if not expenses:
+        print("\n📭  No expenses to calculate!")
+        return
+
+    # Calculate total by adding up all amount
+    total = 0
+    for expense in expenses:
+        total += expense['amount']
+
+    print("\n" + "="*40)
+    print("         SPENDING SUMMARY")
+    print("="*40)
+    print(f"Total Expenses: {len(expenses)}")
+    print(f"Total Amount:   ${total:.2f}")
+    print(f"Average:        ${total / len(expenses):.2f}")
+    print("="*40)
+
+
 def main():
     """Main Program loop"""
     print("Welcome to your personal Expense Tracker!")
@@ -97,7 +117,7 @@ def main():
         elif choice == '2':
             view_expenses()
         elif choice == '3':
-            print("Total Spending - Coming soon!")
+            calculate_total()
         elif choice == '4':
             print("Filter by Category - Coming soon!")
         elif choice == '5':

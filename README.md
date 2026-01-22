@@ -14,13 +14,13 @@ To become a top-notch Python programmer by building increasingly complex project
 ## 🗺️ Roadmap
 
 ### Phase 1: Foundation Through Action (Weeks 1-3) 🟢
-**Status:** Starting Soon
-- [ ] Personal Expense Tracker (CLI)
-- [ ] Password Strength Checker
-- [ ] Quiz Game with Score Tracking
+**Status:** Completed
+- [✅] Personal Expense Tracker (CLI)
+- [✅] Password Strength Checker
+- [✅] Quiz Game with Score Tracking
 
 ### Phase 2: Structured Programming (Weeks 4-6)
-**Status:** Not Started
+**Status:** Starting Soon
 - [ ] Library Management System
 - [ ] Weather Data Analyzer
 - [ ] Contact Management System

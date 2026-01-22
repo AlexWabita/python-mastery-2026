@@ -15,9 +15,9 @@ To become a top-notch Python programmer by building increasingly complex project
 
 ### Phase 1: Foundation Through Action (Weeks 1-3) 🟢
 **Status:** Completed
-- [✅] Personal Expense Tracker (CLI)
-- [✅] Password Strength Checker
-- [✅] Quiz Game with Score Tracking
+- ✅ Personal Expense Tracker (CLI)
+- ✅ Password Strength Checker
+- ✅ Quiz Game with Score Tracking
 
 ### Phase 2: Structured Programming (Weeks 4-6)
 **Status:** Starting Soon
